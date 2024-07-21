@@ -22,10 +22,7 @@ const PassButton = ({
     return (
         <div className="pass-button">
             {(stage === 0 && turn && pileInitialized) && (
-                <button 
-                    style={{ position: "absolute", ...getPassButtonPosition(windowSize) }} 
-                    onClick={handlePass}
-                >
+                <button style={{ position: "absolute", ...getPassButtonPosition(windowSize) }} onClick={handlePass}>
                     Pass
                 </button>
             )}
