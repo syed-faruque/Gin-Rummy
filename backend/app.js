@@ -47,6 +47,16 @@ io.on("connection", (socket) => {
         io.to(player2_socket_id).emit("ready", {player: 2});
     }
 
+    socket.on("find-opponent", () => {
+        if (socket.player == 1){
+            socket.opponent_id = player2_socket_id
+        }
+        else {
+            socket.opponent_id = player1_socket_id;
+        }
+        socket.emit("find-opponent", {valid: true});
+    })
+
     socket.on("shuffle-deck", () => {
         if (shuffled_array.length == 0) {
             shuffled_array = getShuffledArray();
@@ -55,58 +65,29 @@ io.on("connection", (socket) => {
     })
 
     socket.on("pass-first-pick", () => {
-        if (socket.player == 1) {
-            io.to(player1_socket_id).emit("pass-first-pick", {self: true});
-            io.to(player2_socket_id).emit("pass-first-pick", {self: false});
-        }
-        else {
-            io.to(player1_socket_id).emit("pass-first-pick", {self: false});
-            io.to(player2_socket_id).emit("pass-first-pick", {self: true});
-        }
+        socket.emit("pass-first-pick", {self: true});
+        io.to(socket.opponent_id).emit("pass-first-pick", {self: false});
     })
 
     socket.on("discard-from-hand", (data) => {
-        if (socket.player == 1) {
-            io.to(player1_socket_id).emit("discard-from-hand", {self: true, index: data.index});
-            io.to(player2_socket_id).emit("discard-from-hand", {self: false, index: data.index});
-        }
-        else {
-            io.to(player1_socket_id).emit("discard-from-hand", {self: false, index: data.index});
-            io.to(player2_socket_id).emit("discard-from-hand", {self: true, index: data.index});
-        }
+        socket.emit("discard-from-hand", {self: true, index: data.index});
+        io.to(socket.opponent_id).emit("discard-from-hand", {self: false, index: data.index});
     })
 
     socket.on("draw-from-deck", () => {
-        if (socket.player == 1) {
-            io.to(player1_socket_id).emit("draw-from-deck", {self: true});
-            io.to(player2_socket_id).emit("draw-from-deck", {self: false});
-        }
-        else {
-            io.to(player1_socket_id).emit("draw-from-deck", {self: false});
-            io.to(player2_socket_id).emit("draw-from-deck", {self: true});
-        }
+        socket.emit("draw-from-deck", {self: true});
+        io.to(socket.opponent_id).emit("draw-from-deck", {self: false});
     })
 
     socket.on("draw-from-pile", () => {
-        if (socket.player == 1) {
-            io.to(player1_socket_id).emit("draw-from-pile", {self: true});
-            io.to(player2_socket_id).emit("draw-from-pile", {self: false});
-        }
-        else {
-            io.to(player1_socket_id).emit("draw-from-pile", {self: false});
-            io.to(player2_socket_id).emit("draw-from-pile", {self: true});
-        }
+        socket.emit("draw-from-pile", {self: true});
+        io.to(socket.opponent_id).emit("draw-from-pile", {self: false});
     })
 
     socket.on("disconnect", () => {
         num_users=0;
         shuffled_array = [];
-        if (socket.player == 1){
-            io.to(player2_socket_id).emit("opponent-disconnect");
-        }
-        else {
-            io.to(player1_socket_id).emit("opponent-disconnect");
-        }
+        io.to(socket.opponent_id).emit("opponent-disconnect");
     });
 
 })
