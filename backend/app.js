@@ -1,17 +1,13 @@
-//library imports
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-
-// server setup
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {cors: {origin: "http://localhost:5173", methods: ["GET", "POST"]}});
-
-// variables
 let num_users = 0;
 let player1_socket_id;
 let player2_socket_id;
+
 
 const getShuffledArray = () => {
     let positions = [
