@@ -4,7 +4,7 @@ const getHandPosition = (index, user, handLength, windowSize) => {
     const cardWidth = 70;
     const cardHeight = 100;
     const overlapProportion = .5;
-    const horizontalShift = .5 * index * cardWidth;
+    const horizontalShift = overlapProportion * index * cardWidth;
     const lengthStack = cardWidth * handLength * overlapProportion;
     const windowWidth = windowSize.width;
     const windowHeight = windowSize.height;
