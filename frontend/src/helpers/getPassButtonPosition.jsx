@@ -1,4 +1,5 @@
 const getPassButtonPosition = (windowSize) => {
+    
     const windowHeight = windowSize.height;
     const windowWidth = windowSize.width;
     const cardWidth = 70;
