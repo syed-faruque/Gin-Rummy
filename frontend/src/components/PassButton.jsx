@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 10 2024
+**/
+
 import getPassButtonPosition from "../helpers/getPassButtonPosition";
 
 const PassButton = ({
