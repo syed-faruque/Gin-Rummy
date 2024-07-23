@@ -11,7 +11,7 @@ const getMeldsAndDeadwood = (hands) => {
         let runs = [];
         let potential_run = [];
 
-        for (let i = 0; i < hand.length; i++) {
+        for (let i = 0; i < hand.length-1; i++) {
             let same_suit = [hand[i]];
 
 // finds all the cards with the same suit as card at current index and stores it
@@ -55,7 +55,7 @@ const getMeldsAndDeadwood = (hands) => {
     const findSets = (hand) => {
         let sets = [];
 
-        for (let i = 0; i < hand.length; i++) {
+        for (let i = 0; i < hand.length-1; i++) {
             let same_value = [hand[i]];
 
 // finds all cards with the same value as card at current index and stores it
@@ -65,7 +65,7 @@ const getMeldsAndDeadwood = (hands) => {
                 }
             }
 
-// if that list of cards with same value is > 3, it qualifies as a set
+// if that list of cards with same value is >= 3, it qualifies as a set
             if (same_value.length >= 3) {
                 sets.push([...same_value]);
             }
