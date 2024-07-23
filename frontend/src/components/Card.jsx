@@ -1,5 +1,13 @@
+/**
+ * @author Syed Faruque
+ * created: July 5 2024
+**/
+
 import {useEffect, useState} from "react";
 import {motion} from "framer-motion"
+
+
+// a card can either be animated or have a fixed position. This component will be used inside Deck, Hands, and Pile....
 
 const Card = ({
     src,
@@ -28,6 +36,7 @@ const Card = ({
         ...style
     };
 
+//~~~~~~~~~~~~~ animated and non animated jsx ~~~~~~~~~~~~~~~~~~//
     if (isAnimated) {
         return (
             <motion.img
