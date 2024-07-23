@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 10 2024
+**/
+
 const getPassButtonPosition = (windowSize) => {
     
     const windowHeight = windowSize.height;
