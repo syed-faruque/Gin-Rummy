@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 10 2024
+**/
+
 import useMessage from "../hooks/useMessage";
 
 const Message = ({
