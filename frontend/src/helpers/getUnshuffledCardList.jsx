@@ -1,3 +1,9 @@
+/**
+ * @author Syed Faruque
+ * created: July 5 2024
+**/
+
+// imports all the card images, yeah... i know it looks messy
 import card1_clubs from '../images/1_of_clubs.png';
 import card2_clubs from '../images/2_of_clubs.png';
 import card3_clubs from '../images/3_of_clubs.png';
@@ -51,6 +57,8 @@ import card11_spades from '../images/11_of_spades.png';
 import card12_spades from '../images/12_of_spades.png';
 import card13_spades from '../images/13_of_spades.png';
 
+
+// this is essentially what information each card holds. This is an unshuffled list containing all card objects.
 const cardList = [
     { src: card1_clubs, value: 1, suit: 'clubs' },
     { src: card2_clubs, value: 2, suit: 'clubs' },
