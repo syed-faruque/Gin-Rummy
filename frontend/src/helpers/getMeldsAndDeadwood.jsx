@@ -67,7 +67,7 @@ const getMeldsAndDeadwood = (hands) => {
 // if that list of cards with same value is >= 3, it qualifies as a set
             if (same_value.length >= 3) {
                 sets.push([...same_value]);
-        // once the list of same value cards is confimred a set, those cards are filtered out from the hand to allow for deadwood list
+        // once the list of same value cards is confirmed a set, those cards are filtered out from the hand to allow for deadwood list
                 same_value.flat().forEach(card => {
                     hand = hand.filter(handCard => handCard.src !== card.src);
                 });
