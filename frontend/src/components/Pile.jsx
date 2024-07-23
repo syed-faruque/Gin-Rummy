@@ -48,10 +48,10 @@ const Pile = ({
 
     // after animation from the hand to the pile. The animation.active needs to be set to false, everything else default values
                     callBack = {() => {
-                        updateAnimationFromHand({...animationFromHand, card_index: null, user: false, active: false})
-                        if (pileInitialized && stage == 2) {
+                        if (pileInitialized && stage == 2 && animationFromHand.active) {
                             updateTurn();
                             updateStage(1);
+                            updateAnimationFromHand({...animationFromHand, card_index: null, user: false, active: false})
                         }
                     }}
                 />
