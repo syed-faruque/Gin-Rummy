@@ -21,14 +21,14 @@ const getMeldsAndDeadwood = (hands) => {
                 }
             }
 
-// sorts the list of cards in the same suit based on their rank
-            same_suit.sort((a, b) => a.rank - b.rank);
+// sorts the list of cards in the same suit based on their value
+            same_suit.sort((a, b) => a.value - b.value);
 
 
 // stores all consecutive pairings in potential_run. Then checks if its 3 or more
             potential_run = [same_suit[0]];
             for (let j = 1; j < same_suit.length; j++) {
-                if (same_suit[j].rank === same_suit[j - 1].rank + 1) {
+                if (same_suit[j].value === same_suit[j - 1].value + 1) {
                     potential_run.push(same_suit[j]);
                 }
                 else {
@@ -56,18 +56,18 @@ const getMeldsAndDeadwood = (hands) => {
         let sets = [];
 
         for (let i = 0; i < hand.length; i++) {
-            let same_rank = [hand[i]];
+            let same_value = [hand[i]];
 
-// finds all cards with the same rank as card at current index and stores it
+// finds all cards with the same value as card at current index and stores it
             for (let j = i + 1; j < hand.length; j++) {
-                if (hand[j].rank === hand[i].rank) {
-                    same_rank.push(hand[j]);
+                if (hand[j].value === hand[i].value) {
+                    same_value.push(hand[j]);
                 }
             }
 
-// if that list of cards with same rank is > 3, it qualifies as a set
-            if (same_rank.length >= 3) {
-                sets.push([...same_rank]);
+// if that list of cards with same value is > 3, it qualifies as a set
+            if (same_value.length >= 3) {
+                sets.push([...same_value]);
             }
         }
 
