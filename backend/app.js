@@ -1,3 +1,10 @@
+/**
+ * @author Syed Faruque
+ * created: July 4 2024
+**/
+
+//~~~~~~~~~~ this is the main backend for the game. When any event occurs, like a move, this notifies both the user and opponent of it. ~~~~~~~//
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
