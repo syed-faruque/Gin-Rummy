@@ -1,3 +1,10 @@
+/**
+ * @author Syed Faruque
+ * created: July 7 2024
+**/
+
+//~~~~~~~~~~~~ returns a cards previous position in the deck before another card was discarded and is animating towards pile ~~~~~~~~~~~~~//
+
 import getHandPosition from "./getHandPosition";
 
 const getHandPositionBeforeDraw = (index, animationFromHand, windowSize) => {
