@@ -41,13 +41,12 @@ const getMeldsAndDeadwood = (hands) => {
 
             if (potential_run.length >= 3) {
                 runs.push([...potential_run]);
+        // once the list is confirmed a run, the hand list is filtered of those cards in the run
+                potential_run.flat().forEach(card => {
+                    hand = hand.filter(handCard => handCard.src !== card.src);
+                });
             }
         }
-
-// filters out all cards in a run from the hand that was passed in
-        runs.flat().forEach(card => {
-            hand = hand.filter(handCard => handCard.src !== card.src);
-        });
 
         return { runs, remainingHand: hand };
     };
@@ -68,13 +67,12 @@ const getMeldsAndDeadwood = (hands) => {
 // if that list of cards with same value is >= 3, it qualifies as a set
             if (same_value.length >= 3) {
                 sets.push([...same_value]);
+        // once the list of same value cards is confimred a set, those cards are filtered out from the hand to allow for deadwood list
+                same_value.flat().forEach(card => {
+                    hand = hand.filter(handCard => handCard.src !== card.src);
+                });
             }
         }
-
-// filters out all the cards in a set from the hand that was passed in
-        sets.flat().forEach(card => {
-            hand = hand.filter(handCard => handCard.src !== card.src);
-        });
 
         return { sets, remainingHand: hand };
     };
