@@ -14,18 +14,18 @@ const getMeldsAndDeadwood = (hands) => {
         for (let i = 0; i < hand.length; i++) {
             let same_suit = [hand[i]];
 
-//~~~~~~~~~~~~ finds all the cards with the same suit as card at current index and stores it ~~~~~~~~~~~~~~//
+// finds all the cards with the same suit as card at current index and stores it
             for (let j = i + 1; j < hand.length; j++) {
                 if (hand[j].suit === hand[i].suit) {
                     same_suit.push(hand[j]);
                 }
             }
 
-//~~~~~~~~~~~~ sorts the list of cards in the same suit based on their rank ~~~~~~~~~~~~~~//
+// sorts the list of cards in the same suit based on their rank
             same_suit.sort((a, b) => a.rank - b.rank);
 
 
-//~~~~~~~~~~~~ stores all consecutive pairings in potential_run. Then checks if its 3 or more ~~~~~~~~~~~~~//
+// stores all consecutive pairings in potential_run. Then checks if its 3 or more
             potential_run = [same_suit[0]];
             for (let j = 1; j < same_suit.length; j++) {
                 if (same_suit[j].rank === same_suit[j - 1].rank + 1) {
@@ -44,7 +44,7 @@ const getMeldsAndDeadwood = (hands) => {
             }
         }
 
-//~~~~~~~~~~~ filters out all cards in a run from the hand that was passed in ~~~~~~~~~~~~//
+// filters out all cards in a run from the hand that was passed in
         runs.flat().forEach(card => {
             hand = hand.filter(handCard => handCard.src !== card.src);
         });
@@ -58,20 +58,20 @@ const getMeldsAndDeadwood = (hands) => {
         for (let i = 0; i < hand.length; i++) {
             let same_rank = [hand[i]];
 
-//~~~~~~~~~~~~ finds all cards with the same rank as card at current index and stores it ~~~~~~~~~~~~//
+// finds all cards with the same rank as card at current index and stores it
             for (let j = i + 1; j < hand.length; j++) {
                 if (hand[j].rank === hand[i].rank) {
                     same_rank.push(hand[j]);
                 }
             }
 
-//~~~~~~~~~~~ if that list of cards with same rank is > 3, it qualifies as a set ~~~~~~~~~~~~//
+// if that list of cards with same rank is > 3, it qualifies as a set
             if (same_rank.length >= 3) {
                 sets.push([...same_rank]);
             }
         }
 
-//~~~~~~~~~~~ filters out all the cards in a set from the hand that was passed in ~~~~~~~~~~//
+// filters out all the cards in a set from the hand that was passed in
         sets.flat().forEach(card => {
             hand = hand.filter(handCard => handCard.src !== card.src);
         });
