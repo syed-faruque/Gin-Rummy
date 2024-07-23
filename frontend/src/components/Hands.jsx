@@ -33,6 +33,7 @@ const Hands = ({
     const user_hand_length = hands.user_hand.length;
     const opponent_hand_length = hands.opponent_hand.length;
 
+    // lets the backend know the user wants to remove a card from their hand. As long as its not his last pick, no issue.
     const emitDiscardNotice = (index, turn, stage) => {
         const discarded_card = hands.user_hand[index];
         if (last.src != discarded_card.src && turn && stage == 2) {
