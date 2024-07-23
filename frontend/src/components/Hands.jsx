@@ -49,6 +49,10 @@ const Hands = ({
                         src = {card.src}
                         alt = {"user-hand-card"}
                         animationStartPoint = {animationToHandStartingPoint}
+    /**
+     * Just making clear, if a draw animation is active. I want all other cards to be fixed besides the card that was moved.
+     * As a result, I set the final point to be the position before draw and I make the transition nullified during this period
+    **/
                         animationFinalPoint = {(animationFromHand.active && animationFromHand.user) ? getHandPositionBeforeDraw(index, animationFromHand, windowSize) : getHandPosition(index, true, user_hand_length, windowSize)}
                         animationTime = {(animationFromHand.active && animationFromHand.user) ? {duration: 0} : {duration: 0.6}}
                         isAnimated = {true}
@@ -64,6 +68,10 @@ const Hands = ({
                         src = {cardback}
                         alt = {"opponent-hand-card"}
                         animationStartPoint = {animationToHandStartingPoint}
+    /**
+     * Just making clear, if a draw animation is active. I want all other cards to be fixed besides the card that was moved.
+     * As a result, I set the final point to be the position before draw and I make the transition nullified during this period
+    **/
                         animationFinalPoint = {(animationFromHand.active && !animationFromHand.user) ? getHandPositionBeforeDraw(index, animationFromHand, windowSize) : getHandPosition(index, false, opponent_hand_length, windowSize)}
                         animationTime = {(animationFromHand.active && !animationFromHand.user) ? {duration: 0} : {duration: 0.6}}
                         zIndex={useHandCardZIndex(index, animationFromHand)}
