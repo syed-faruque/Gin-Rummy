@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 7 2024
+**/
+
 import { useState } from "react";
 import getDeckPosition from "../helpers/getDeckPosition";
 import useWindowSize from "./useWindowSize";
