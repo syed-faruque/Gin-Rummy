@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 7 2024
+**/
+
 const useHandCardZIndex = (index, animationFromHand) => {
     if (!animationFromHand.active) return 1;
     if (index < animationFromHand.card_index) return 0;
