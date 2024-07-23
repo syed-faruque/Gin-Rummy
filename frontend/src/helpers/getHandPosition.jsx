@@ -1,4 +1,13 @@
+/**
+ * @author Syed Faruque
+ * created: July 5 2024
+**/
+
+//~~~~~~~~~~~~ returns a cards position in the hand in pixels based off its index, whether its the user or opponent, the size of the hand, the size of the computer screen ~~~~~~~~~~~~~//
+
 const getHandPosition = (index, user, handLength, windowSize) => {
+
+// used math calculations here. Pay close attention. Should make sense.
     
     let position;
     const cardWidth = 70;
