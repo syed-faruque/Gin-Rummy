@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 5 2024
+**/
+
 import useInitializeHands from "../hooks/useInitializeHands";
 import useHandListeners from "../hooks/useHandListeners";
 import useHandCardZIndex from "../hooks/useHandCardZIndex";
