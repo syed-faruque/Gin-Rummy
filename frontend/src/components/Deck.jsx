@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 5 2024
+**/
+
 import Card from "./Card";
 import getDeckPosition from "../helpers/getDeckPosition";
 import useInitializeDeck from "../hooks/useInitializeDeck";
