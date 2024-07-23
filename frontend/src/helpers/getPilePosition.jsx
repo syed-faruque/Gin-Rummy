@@ -1,3 +1,10 @@
+/**
+ * @author Syed Faruque
+ * created: July 5 2024
+**/
+
+//~~~~~~~~~~~~ returns a cards position in the pile in pixels based off its index and the size of the computer screen ~~~~~~~~~~~~~//
+
 const getPilePosition = (index, windowSize) => {
 
     const cardWidth = 70;
