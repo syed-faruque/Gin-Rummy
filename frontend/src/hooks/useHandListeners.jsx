@@ -1,3 +1,11 @@
+/**
+ * @author Syed Faruque
+ * created: July 10 2024
+**/
+
+
+//~~~~~~~~~~ this hook takes action when the server allerts a move made by the opponent or the user that involves adding to the hand ~~~~~~//
+
 import { useEffect } from "react";
 import getDeckPosition from "../helpers/getDeckPosition";
 import getPilePosition from "../helpers/getPilePosition";
@@ -7,6 +15,7 @@ const useHandListeners = (socket, player, windowSize, updateStage, updateLast, u
     useEffect(() => {
         if (!deckInitialized || !handsInitialized || !pileInitialized) return;
 
+// when a card is drawed from the deck. The last index in the deck list is pulled off and appended to the user or opponent hand.
         socket.on("draw-from-deck", (data) => {
             updateAnimationToHandStartingPoint(getDeckPosition(deck.length-1, windowSize));
             updateStage(2);
@@ -23,7 +32,7 @@ const useHandListeners = (socket, player, windowSize, updateStage, updateLast, u
             updateHands({ user_hand, opponent_hand });
         });
         
-
+// when a card is drawed from the pile. The last index in the pile list is pulled off and appended to the user or opponent hand.
         socket.on("draw-from-pile", (data) => {
             updateAnimationToHandStartingPoint(getPilePosition(pile.length-1, windowSize));
             updateStage(2);
@@ -40,6 +49,7 @@ const useHandListeners = (socket, player, windowSize, updateStage, updateLast, u
             updateHands({ user_hand, opponent_hand});
         })
 
+// when the pass happens twice, the card on the pile is automatically pushed onto player one's hand
         socket.on("pass-first-pick", (data) => {
             updateAnimationToHandStartingPoint(getPilePosition(pile.length-1, windowSize));
             const card_pile = [...pile];
