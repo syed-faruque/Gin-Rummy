@@ -38,6 +38,8 @@ const getShuffledArray = () => {
 let shuffled_array = getShuffledArray();
 
 io.on("connection", (socket) => {
+
+    // as soon as two players join the lobby, the game starts
     num_users++;
     if (num_users == 1) {
         player1_socket_id = socket.id;
