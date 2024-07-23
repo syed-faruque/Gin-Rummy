@@ -45,6 +45,8 @@ const Pile = ({
                     animationTime={{duration: 0.6}}
                     isAnimated={true}
                     onClick={deckInitialized && handsInitialized && pileInitialized ? () => emitDrawNotice(turn, stage) : null}
+
+    // after animation from the hand to the pile. The animation.active needs to be set to false, everything else default values
                     callBack = {() => {
                         updateAnimationFromHand({...animationFromHand, card_index: null, user: false, active: false})
                         if (pileInitialized && stage == 2) {
