@@ -13,23 +13,23 @@ const useMeldsAndDeadwood = (hands) => {
 
     const findRuns = (hand) => {
         let runs = [];
-        let potential_run = [];
-
-        for (let i = 0; i < hand.length - 1; i++) {
+        let i = 0;
+    
+        while (i < hand.length - 1) {
             let same_suit = [hand[i]];
-
+    
         // finds all the cards with the same suit as card at current index and stores it
             for (let j = i + 1; j < hand.length; j++) {
                 if (hand[j].suit === hand[i].suit) {
                     same_suit.push(hand[j]);
                 }
             }
-
+    
         // sorts the list of cards in the same suit based on their value
             same_suit.sort((a, b) => a.value - b.value);
-
+    
         // stores all consecutive pairings in potential_run. Then checks if its 3 or more
-            potential_run = [same_suit[0]];
+            let potential_run = [same_suit[0]];
             for (let j = 1; j < same_suit.length; j++) {
                 if (same_suit[j].value === same_suit[j - 1].value + 1) {
                     potential_run.push(same_suit[j]);
@@ -41,22 +41,29 @@ const useMeldsAndDeadwood = (hands) => {
                         potential_run.forEach(card => {
                             hand = hand.filter(handCard => handCard.src !== card.src);
                         });
+                        i = 0; // reset i to 0 to ensure every other card is checked again after removal
+                        break;
                     }
                     potential_run = [same_suit[j]];
                 }
             }
-
+    
             if (potential_run.length >= 3) {
                 runs.push([...potential_run]);
             // once the list is confirmed a run, the hand list is filtered of those cards in the run
                 potential_run.forEach(card => {
                     hand = hand.filter(handCard => handCard.src !== card.src);
                 });
+                i = 0; // reset i to 0 to ensure every other card is checked again after removal
+            } 
+            else {
+                i++;
             }
         }
-
+    
         return runs;
     };
+
 
     const findSets = (hand) => {
         let sets = [];
