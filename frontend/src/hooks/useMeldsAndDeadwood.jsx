@@ -9,7 +9,6 @@ const useMeldsAndDeadwood = (hands) => {
     let user_hand = [...hands.user_hand];
     let opponent_hand = [...hands.opponent_hand];
 
-// state holding meld and deadwood data
     const [meldsAndDeadwood, setMeldsAndDeadwood] = useState({});
 
     const findRuns = (hand) => {
@@ -39,6 +38,10 @@ const useMeldsAndDeadwood = (hands) => {
                 else {
                     if (potential_run.length >= 3) {
                         runs.push([...potential_run]);
+                // once the list is confirmed a run, the hand list is filtered of those cards in the run
+                        potential_run.forEach(card => {
+                            hand = hand.filter(handCard => handCard.src !== card.src);
+                        });
                     }
                     potential_run = [same_suit[j]];
                 }
