@@ -93,76 +93,76 @@ const useMeldsAndDeadwood = (hands) => {
     };
 
 // helps sort out overlap between melds to produce lowest possible deadwood. Returns deadwood and finalized melds.
-    const processMeldsAndDeadwood = (hand, findRuns, findSets) => {
-        const runs = findRuns(hand) || [];
-        const sets = findSets(hand) || [];
-        let set_srcs = [];
-        let run_srcs = [];
-    
-        for (let i = 0; i < sets.length; i++) {
-            for (let j = 0; j < runs.length; j++) {
-                set_srcs = sets[i].map(card => card.src);
-                run_srcs = runs[j].map(card => card.src);
-                const overlaps = set_srcs.filter(card_src => run_srcs.includes(card_src));
-                for (const overlap of overlaps) {
-                    const setIndex = set_srcs.indexOf(overlap);
-                    const runIndex = run_srcs.indexOf(overlap);
-    
-                    if (setIndex !== -1 && runIndex !== -1) {
-                        const setTotal = sets[i].reduce((sum, card) => sum + card.value, 0);
-                        const runTotal = runs[j].reduce((sum, card) => sum + card.value, 0);
+const processMeldsAndDeadwood = (hand, findRuns, findSets) => {
+    const runs = findRuns(hand) || [];
+    const sets = findSets(hand) || [];
+    let set_srcs = [];
+    let run_srcs = [];
 
-                    // checks if the run that had the overlap totals higher than the set
-                        if (runTotal > setTotal) {
+    for (let i = 0; i < sets.length; i++) {
+        for (let j = 0; j < runs.length; j++) {
+            set_srcs = sets[i].map(card => card.src);
+            run_srcs = runs[j].map(card => card.src);
+            const overlap = set_srcs.find(card_src => run_srcs.includes(card_src));
 
-                        // if the run is just 3, than it might make sense to give it preference given it totals more
-                            if (runs[j].length == 3) {
-                                sets[i].splice(setIndex, 1);
-                                if (sets[i].length < 3) {
-                                    sets.splice(i, 1);
-                                }
+            if (overlap) {
+                const setIndex = set_srcs.indexOf(overlap);
+                const runIndex = run_srcs.indexOf(overlap);
+
+                if (setIndex !== -1 && runIndex !== -1) {
+                    const setTotal = sets[i].reduce((sum, card) => sum + card.value, 0);
+                    const runTotal = runs[j].reduce((sum, card) => sum + card.value, 0);
+
+                // Checks if the run with the overlap totals higher than the set
+                    if (runTotal > setTotal) {
+                    // If the run is just 3 cards, it might make sense to give it preference
+                        if (runs[j].length === 3) {
+                            sets[i].splice(setIndex, 1);
+                            if (sets[i].length < 3) {
+                                sets.splice(i, 1);
                             }
-                        // if the run is more than 3, regardless of whether it gets the overlapped card, it will still be a meld. So the set gets preference.
-                            else {
-                                runs[j].splice(runIndex, 1);
-                                if (runs[j].length < 3) {
-                                    runs.splice(j, 1);
-                                }
+                        } 
+                        else {
+                        // If the run has more than 3 cards, the set gets preference
+                            runs[j].splice(runIndex, 1);
+                            if (runs[j].length < 3) {
+                                runs.splice(j, 1);
                             }
                         }
-                    
-                    // if the run doesn't total more than the set, it makes no sense to give the run more preference, unless the set is already more than 3
-                        else {
-                            if (sets[i].length > 3) {
-                                sets[i].splice(setIndex, 1);
-                                if (sets[i].length < 3) {
-                                    sets.splice(i, 1);
-                                }
+                    } 
+                    else {
+                // If the run doesn't total more than the set, prioritize the set unless it's already more than 3
+                        if (sets[i].length > 3) {
+                            sets[i].splice(setIndex, 1);
+                            if (sets[i].length < 3) {
+                                sets.splice(i, 1);
                             }
-                            else {
-                                runs[j].splice(runIndex, 1);
-                                if (runs[j].length < 3) {
-                                    runs.splice(j, 1);
-                                }
+                        } else {
+                            runs[j].splice(runIndex, 1);
+                            if (runs[j].length < 3) {
+                                runs.splice(j, 1);
                             }
                         }
                     }
                 }
             }
         }
-    
-        let allSrcs = [];
-        sets.forEach(set => {
-            allSrcs = allSrcs.concat(set.map(card => card.src));
-        });
-        runs.forEach(run => {
-            allSrcs = allSrcs.concat(run.map(card => card.src));
-        });
-        allSrcs = [...new Set(allSrcs)];
-        const deadwood = hand.filter(handCard => !allSrcs.includes(handCard.src));
-    
-        return { runs, sets, deadwood };
-    };
+    }
+
+// filters hand from all the cards that are in the meld to form the deadwood pile.
+    let allSrcs = [];
+    sets.forEach(set => {
+        allSrcs = allSrcs.concat(set.map(card => card.src));
+    });
+    runs.forEach(run => {
+        allSrcs = allSrcs.concat(run.map(card => card.src));
+    });
+    allSrcs = [...new Set(allSrcs)];
+    const deadwood = hand.filter(handCard => !allSrcs.includes(handCard.src));
+
+    return { runs, sets, deadwood };
+};
+
     
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ updates and returns state ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
