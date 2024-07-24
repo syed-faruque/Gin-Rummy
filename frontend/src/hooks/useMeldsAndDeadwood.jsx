@@ -65,8 +65,6 @@ const useMeldsAndDeadwood = (hands) => {
 // finds all cards with the same value as card at current index and stores it
             for (let j = i + 1; j < hand.length; j++) {
                 if (hand[j].value === hand[i].value) {
-                    console.log(j);
-                    console.log(i);
                     same_value.push(hand[j]);
                 }
             }
