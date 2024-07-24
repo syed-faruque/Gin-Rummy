@@ -1,3 +1,8 @@
+/**
+ * @author Syed Faruque
+ * created: July 20 2024
+**/
+
 import useMeldsAndDeadwood from "../hooks/useMeldsAndDeadwood";
 
 const MeldsAndDeadWoodTracker = ({
@@ -16,6 +21,7 @@ const MeldsAndDeadWoodTracker = ({
     windowSize
 }) => {
 
+// uses a hook to obtain meld and deadwood data. This hook can be found in hooks folder....
     const meldsAndDeadwoodData = useMeldsAndDeadwood(hands);
     const userRuns = meldsAndDeadwoodData.user_collection?.user_runs || [];
     const userSets = meldsAndDeadwoodData.user_collection?.user_sets || [];
