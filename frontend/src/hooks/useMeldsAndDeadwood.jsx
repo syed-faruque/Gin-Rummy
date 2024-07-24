@@ -11,14 +11,10 @@ const useMeldsAndDeadwood = (hands) => {
 
     const [meldsAndDeadwood, setMeldsAndDeadwood] = useState({});
 
-// filters out cards in a list of melds from the hands list. This makes the deadwood list formation easier.
+// filters out cards in a list of melds from the hands list. This allows for deadwood list formation.
     const findRemainingHand = (melds, hand) => {
-        for (let i = 0; i < melds.length; i++) {
-            for (let j = i; j < melds[i].length; j++) {
-                hand.filter(handCard => handCard.src !== melds[i][j].src);
-            }
-        }
-        return hand;
+        let meldedCards = melds.flat();
+        return hand.filter(handCard => !meldedCards.some(meldedCard => meldedCard.src === handCard.src));
     }
 
     const findRuns = (hand) => {
@@ -84,7 +80,7 @@ const useMeldsAndDeadwood = (hands) => {
 
         const remainingHand = findRemainingHand(sets, hand);
     
-        return { sets, remainingHand: hand };
+        return { sets, remainingHand};
     };
 
 
