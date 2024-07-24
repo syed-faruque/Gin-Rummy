@@ -3,19 +3,13 @@
  * created: July 15 2024
 **/
 
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 const useMeldsAndDeadwood = (hands) => {
     let user_hand = [...hands.user_hand];
     let opponent_hand = [...hands.opponent_hand];
 
     const [meldsAndDeadwood, setMeldsAndDeadwood] = useState({});
-
-// filters out cards in a list of melds from the hands list. This allows for deadwood list formation.
-    const findRemainingHand = (melds, hand) => {
-        let meldedCards = melds.flat();
-        return hand.filter(handCard => !meldedCards.some(meldedCard => meldedCard.src === handCard.src));
-    }
 
     const findRuns = (hand) => {
         let runs = [];
@@ -44,6 +38,10 @@ const useMeldsAndDeadwood = (hands) => {
                 else {
                     if (potential_run.length >= 3) {
                         runs.push([...potential_run]);
+                // once the list is confirmed a run, the hand list is filtered of those cards in the run
+                        potential_run.forEach(card => {
+                            hand = hand.filter(handCard => handCard.src !== card.src);
+                        });
                     }
                     potential_run = [same_suit[j]];
                 }
@@ -51,37 +49,49 @@ const useMeldsAndDeadwood = (hands) => {
 
             if (potential_run.length >= 3) {
                 runs.push([...potential_run]);
+        // once the list is confirmed a run, the hand list is filtered of those cards in the run
+                potential_run.forEach(card => {
+                    hand = hand.filter(handCard => handCard.src !== card.src);
+                });
             }
         }
 
-        const remainingHand = findRemainingHand(runs, hand);
-
-        return { runs, remainingHand };
+        return { runs, remainingHand: hand };
     };
 
     const findSets = (hand) => {
         let sets = [];
-        
-        for (let i = hand.length - 1; i >= 0; i--) {
+        let i = 0;
+    
+        while (i < hand.length - 1) {
             let same_value = [hand[i]];
     
-            // Find all cards with the same value as the card at current index
-            for (let j = i - 1; j >= 0; j--) {
+    // finds all cards with the same value as card at current index and stores it
+            for (let j = i + 1; j < hand.length; j++) {
                 if (hand[j].value === hand[i].value) {
                     same_value.push(hand[j]);
                 }
             }
     
-            // If that list of cards with the same value is >= 3, it qualifies as a set
+        // if that list of cards with same value is >= 3, it qualifies as a set
             if (same_value.length >= 3) {
                 sets.push([...same_value]);
+    
+            // once the list of same value cards is confirmed a set, those cards are filtered out from the hand to allow for deadwood list
+                hand = hand.filter(handCard => !same_value.some(card => card.src === handCard.src));
+    
+            // reset i to 0 to ensure every other card is checked again after removal
+                i = 0;
+            } 
+            else {
+        // move to the next card if no set is found
+                i++;
             }
         }
-
-        const remainingHand = findRemainingHand(sets, hand);
     
-        return { sets, remainingHand};
+        return { sets, remainingHand: hand };
     };
+    
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ updates and returns state ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
