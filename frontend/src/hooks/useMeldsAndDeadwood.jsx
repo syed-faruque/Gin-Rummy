@@ -9,6 +9,7 @@ const useMeldsAndDeadwood = (hands) => {
     let user_hand = [...hands.user_hand];
     let opponent_hand = [...hands.opponent_hand];
 
+// state holding meld and deadwood data
     const [meldsAndDeadwood, setMeldsAndDeadwood] = useState({});
 
     const findRuns = (hand) => {
