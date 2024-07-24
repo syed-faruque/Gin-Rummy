@@ -94,7 +94,7 @@ const useMeldsAndDeadwood = (hands) => {
     
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ updates and returns state ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ updates and returns state ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
     useEffect(() => {
         const user_run_data = findRuns(user_hand);
