@@ -11,6 +11,16 @@ const useMeldsAndDeadwood = (hands) => {
 
     const [meldsAndDeadwood, setMeldsAndDeadwood] = useState({});
 
+// filters out cards in a list of melds from the hands list. This makes the deadwood list formation easier.
+    const findRemainingHand = (melds, hand) => {
+        for (let i = 0; i < melds.length; i++) {
+            for (let j = i; j < melds[i].length; j++) {
+                hand.filter(handCard => handCard.src !== melds[i][j].src);
+            }
+        }
+        return hand;
+    }
+
     const findRuns = (hand) => {
         let runs = [];
         let potential_run = [];
@@ -38,10 +48,6 @@ const useMeldsAndDeadwood = (hands) => {
                 else {
                     if (potential_run.length >= 3) {
                         runs.push([...potential_run]);
-                // once the list is confirmed a run, the hand list is filtered of those cards in the run
-                        potential_run.forEach(card => {
-                            hand = hand.filter(handCard => handCard.src !== card.src);
-                        });
                     }
                     potential_run = [same_suit[j]];
                 }
@@ -49,39 +55,35 @@ const useMeldsAndDeadwood = (hands) => {
 
             if (potential_run.length >= 3) {
                 runs.push([...potential_run]);
-        // once the list is confirmed a run, the hand list is filtered of those cards in the run
-                potential_run.forEach(card => {
-                    hand = hand.filter(handCard => handCard.src !== card.src);
-                });
             }
         }
 
-        return { runs, remainingHand: hand };
+        const remainingHand = findRemainingHand(runs, hand);
+
+        return { runs, remainingHand };
     };
 
     const findSets = (hand) => {
         let sets = [];
-
-        for (let i = 0; i < hand.length-1; i++) {
+        
+        for (let i = hand.length - 1; i >= 0; i--) {
             let same_value = [hand[i]];
-
-// finds all cards with the same value as card at current index and stores it
-            for (let j = i + 1; j < hand.length; j++) {
+    
+            // Find all cards with the same value as the card at current index
+            for (let j = i - 1; j >= 0; j--) {
                 if (hand[j].value === hand[i].value) {
                     same_value.push(hand[j]);
                 }
             }
-
-// if that list of cards with same value is >= 3, it qualifies as a set
+    
+            // If that list of cards with the same value is >= 3, it qualifies as a set
             if (same_value.length >= 3) {
                 sets.push([...same_value]);
-        // once the list of same value cards is confirmed a set, those cards are filtered out from the hand to allow for deadwood list
-                same_value.forEach(card => {
-                    hand = hand.filter(handCard => handCard.src !== card.src);
-                });
             }
         }
 
+        const remainingHand = findRemainingHand(sets, hand);
+    
         return { sets, remainingHand: hand };
     };
 
