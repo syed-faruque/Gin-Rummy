@@ -21,12 +21,9 @@ const MeldsAndDeadWoodTracker = ({
     windowSize
 }) => {
 
-// uses a hook to obtain meld and deadwood data. This hook can be found in hooks folder....
-    const meldsAndDeadwoodData = useMeldsAndDeadwood(hands);
-    const userRuns = meldsAndDeadwoodData.user_collection?.user_runs || [];
-    const userSets = meldsAndDeadwoodData.user_collection?.user_sets || [];
-    const deadwood = meldsAndDeadwoodData.user_collection?.user_deadwood || [];
-
+    const [userCollection, opponentCollection] = useMeldsAndDeadwood(hands);
+    const user_melds = userCollection.user_melds || [];
+    const user_deadwood = userCollection.user_deadwood || [];
     const windowHeight = windowSize.height;
     const marginMelds = windowHeight / 7;
     const marginDeadwood = windowHeight / 10;
@@ -66,17 +63,8 @@ const MeldsAndDeadWoodTracker = ({
         <div className="MeldsAndDeadwoodTracker">
             <div style={styles.melds}>
                 <span style={styles.label}>Melds:</span>
-                {userRuns.length > 0 && userRuns.map((meld, index) => (
+                {user_melds.length > 0 && user_melds.map((meld, index) => (
                     <div key={`run-${index}`} style={styles.meld}>
-                        {meld.map(card => (
-                            <span key={card.value + card.suit} style={styles.cardSymbol}>
-                                {card.symbol}
-                            </span>
-                        ))}
-                    </div>
-                ))}
-                {userSets.length > 0 && userSets.map((meld, index) => (
-                    <div key={`set-${index}`} style={styles.meld}>
                         {meld.map(card => (
                             <span key={card.value + card.suit} style={styles.cardSymbol}>
                                 {card.symbol}
@@ -88,7 +76,7 @@ const MeldsAndDeadWoodTracker = ({
             <div style={styles.deadwood}>
                 <span style={styles.label}>Deadwood:</span>
                 <div style={styles.meld}>
-                    {deadwood.length > 0 && deadwood.map(card => (
+                    {user_deadwood.length > 0 && user_deadwood.map(card => (
                         <span key={card.value + card.suit} style={styles.cardSymbol}>
                             {card.symbol}
                         </span>
@@ -100,3 +88,4 @@ const MeldsAndDeadWoodTracker = ({
 }
 
 export default MeldsAndDeadWoodTracker;
+
