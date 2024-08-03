@@ -36,8 +36,27 @@ const useMeldsAndDeadwood = (hands) => {
         return isSet(cards) || isRun(cards);
     }
 
-    const calculateTotalValue = (cards) => {
+    const calculateTotalValueOfCards = (cards) => {
         return cards.reduce((total, card) => total + card.value, 0);
+    }
+
+    const calculateTotalValueOfMeldCombination = (meldlist) => {
+        const flattened = meldlist.flat();
+        const total_value = calculateTotalValueOfCards(flattened);
+        return total_value;
+    }
+
+    const findAllListCombinations = (arr) => {
+        const result = [];
+        for (const element of arr) {
+            const newCombinations = [];
+            for (const combination of result) {
+                newCombinations.push([...combination, element]);
+            }
+            result.push(...newCombinations);
+            result.push([element]);
+        }
+        return result;
     }
 
     const isOverlap = (cardlist1, cardlist2) => {
@@ -50,29 +69,56 @@ const useMeldsAndDeadwood = (hands) => {
         }
         return false;
     }
-    
 
-    const findAllMeldCombinations = (cards) => {
-        const result = [];
-        for (const card of cards) {
-            const newCombinations = [];
-            for (const combination of result) {
-                newCombinations.push([...combination, card]);
+    const isWorkingMeldCombination = (meldlist) => {
+        const flattened = meldlist.flat();
+        for (let i = 0; i < flattened.length-1; i++) {
+            for (let j = i+1; j < flattened.length; j++) {
+                if (flattened[i].src === flattened[j].src) {
+                    return false;
+                }
             }
-            result.push(...newCombinations);
-            result.push([card]);
         }
-        const possibleMeldCombinations = result.filter(combo => combo.length >= 3);
-        const meldCombinations = possibleMeldCombinations.filter(possibleMeld => isMeld(possibleMeld));
-        return meldCombinations;
+        return true;
+    }
+
+
+    const findAllPossibleMelds = (cards) => {
+        const allCardCombinations = findAllListCombinations(cards);
+        const groupings = allCardCombinations.filter(combo => combo.length >= 3);
+        const possibleMelds = groupings.filter(grouping => isMeld(grouping));
+        return possibleMelds;
     }
 
     const findAllWorkingMeldCombinations = (cards) => {
-        const allMeldCombinations = findAllMeldCombinations(cards);
-        
-
+        const allPossibleMelds = findAllPossibleMelds(cards);
+        const allMeldCombinations = findAllListCombinations(allPossibleMelds);
+        const allWorkingMeldCombinations = allMeldCombinations.filter(meldlist => isWorkingMeldCombination(meldlist));
+        return allWorkingMeldCombinations;
     }
 
+    const findBestWorkingMeldCombination = (cards) => {
+        const allWorkingMeldCombinations = findAllWorkingMeldCombinations(cards);
+        let max_value = 0;
+        let bestWorkingMeldCombination = allWorkingMeldCombinations[0];
+        for (let i = 0; i < allWorkingMeldCombinations.length; i++) {
+            const current_meld_combination = allWorkingMeldCombinations[i];
+            const current_total = calculateTotalValueOfMeldCombination(current_meld_combination);
+            if (current_total >= max_value) {
+                max_value = current_total;
+                bestWorkingMeldCombination = current_meld_combination;
+            }
+        }
+        return bestWorkingMeldCombination;
+    }
+
+    const findDeadwoodPile = (cards) => {
+        const bestWorkingMeldCombination = findBestWorkingMeldCombination(cards);
+        const flattened = bestWorkingMeldCombination.flat();
+        const flattened_srcs = flattened.map(card => card.src);
+        const deadwood = cards.filter(card => !flattened_srcs.includes(card.src));
+        return deadwood;
+    }
 
 }
 
