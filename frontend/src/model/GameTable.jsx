@@ -7,6 +7,7 @@ import Pile from "../components/Pile";
 import PassButton from "../components/PassButton";
 import useWindowSize from "../hooks/useWindowSize";
 import Message from "../components/Message";
+import MeldsAndDeadWoodTracker from "../components/MeldsAndDeadwoodTracker";
 
 const GameTable = ({socket, player}) => {
 
@@ -100,6 +101,7 @@ const GameTable = ({socket, player}) => {
             <Pile {...props}/>
             <PassButton {...props} />
             <Message {...props} />
+            <MeldsAndDeadWoodTracker {...props} />
         </main>
     )
 
