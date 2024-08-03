@@ -16,10 +16,10 @@ const useMeldsAndDeadwood = (hands) => {
 
 // checks if a list of cards is a run
     const isRun = (cards) => {
-        cards.sort((a, b) => a.value - b.value);
+        cards.sort((a, b) => a.value - b.value); // sorts the list of cards by value
         const suit = cards[0].suit;
         for (let i = 1; i < cards.length; i++) {
-            if (cards[i].suit !== suit || cards[i].value !== cards[i - 1].value + 1) {
+            if (cards[i].suit !== suit || cards[i].value !== cards[i - 1].value + 1) { // suit discrepency or nonconsecutive means it can not be a run
                 return false;
             }
         }
@@ -28,10 +28,10 @@ const useMeldsAndDeadwood = (hands) => {
 
 // checks if a list of cards is a set
     const isSet = (cards) => {
-        cards.sort((a, b) => a.value - b.value);
+        cards.sort((a, b) => a.value - b.value); // sorts the list of cards by value
         const rank = cards[0].value;
         for (let i = 1; i < cards.length; i++) {
-            if (cards[i].value !== rank) {
+            if (cards[i].value !== rank) { // value discrepency means it can no longer be a set
                 return false;
             }
         }
@@ -50,7 +50,7 @@ const useMeldsAndDeadwood = (hands) => {
 
 // finds the total value of a list of melds. The list of melds is a two-d array
     const calculateTotalValueOfMeldCombination = (meldlist) => {
-        const flattened = meldlist.flat();
+        const flattened = meldlist.flat(); // flattens the 2d array into a 1d array
         const total_value = calculateTotalValueOfCards(flattened);
         return total_value;
     }
@@ -74,7 +74,7 @@ const useMeldsAndDeadwood = (hands) => {
         const flattened = meldlist.flat();
         for (let i = 0; i < flattened.length-1; i++) {
             for (let j = i+1; j < flattened.length; j++) {
-                if (flattened[i].src === flattened[j].src) {
+                if (flattened[i].src === flattened[j].src) {  // case where overlapping card is found
                     return false;
                 }
             }
@@ -108,6 +108,7 @@ const useMeldsAndDeadwood = (hands) => {
         const allWorkingMeldCombinations = findAllWorkingMeldCombinations(cards);
         let max_value = 0;
         let bestWorkingMeldCombination = allWorkingMeldCombinations[0];
+    // loops through and updates max value and bestWorkingMeldCombination temp variables to reflect the optimal ones
         for (let i = 0; i < allWorkingMeldCombinations.length; i++) {
             const current_meld_combination = allWorkingMeldCombinations[i];
             const current_total = calculateTotalValueOfMeldCombination(current_meld_combination);
@@ -124,13 +125,13 @@ const useMeldsAndDeadwood = (hands) => {
         if (!melds || !Array.isArray(melds)) {
             return cards;
         }
-        const flattened = melds.flat();
-        const flattened_srcs = flattened.map(card => card.src);
-        const deadwood = cards.filter(card => !flattened_srcs.includes(card.src));
+        const flattened = melds.flat(); // flattens out list of melds into a 1d array
+        const flattened_srcs = flattened.map(card => card.src); // extracts into a list of each card src properties
+        const deadwood = cards.filter(card => !flattened_srcs.includes(card.src)); // filters out the cards that are not in a meld
         return deadwood;
     }
 
-// ~~~~~~~~~~~~~~~~~~~~~ recalculate every time hands change and return state ~~~~~~~~~~~~~~~~~~~~~~ //
+// recalculate every time hands change and return state
     useEffect(() => {
         if (!hands || !hands.user_hand || !hands.opponent_hand) return;
 
