@@ -54,9 +54,10 @@ const MeldsAndDeadWoodTracker = ({
             borderRadius: '2px',
             backgroundColor: 'white',
         },
-        cardSymbol: {
+        cardSymbol: (color) => ({
             fontSize: '12px',
-        }
+            color: color,
+        })
     };
 
     return (
@@ -66,7 +67,7 @@ const MeldsAndDeadWoodTracker = ({
                 {user_melds.length > 0 && user_melds.map((meld, index) => (
                     <div key={`run-${index}`} style={styles.meld}>
                         {meld.map(card => (
-                            <span key={card.value + card.suit} style={styles.cardSymbol}>
+                            <span key={card.value + card.suit} style={styles.cardSymbol(card.color)}>
                                 {card.symbol}
                             </span>
                         ))}
@@ -77,7 +78,7 @@ const MeldsAndDeadWoodTracker = ({
                 <span style={styles.label}>Deadwood:</span>
                 <div style={styles.meld}>
                     {user_deadwood.length > 0 && user_deadwood.map(card => (
-                        <span key={card.value + card.suit} style={styles.cardSymbol}>
+                        <span key={card.value + card.suit} style={styles.cardSymbol(card.color)}>
                             {card.symbol}
                         </span>
                     ))}
@@ -88,4 +89,5 @@ const MeldsAndDeadWoodTracker = ({
 }
 
 export default MeldsAndDeadWoodTracker;
+
 
