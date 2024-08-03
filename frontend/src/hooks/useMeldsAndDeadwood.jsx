@@ -9,6 +9,8 @@ const useMeldsAndDeadwood = (hands) => {
 
     const user_hand = [...hands.user_hand];
     const opponent_hand = [...hands.opponent_hand];
+    const [userCollection, setUserCollection] = useState({user_melds: [], user_deadwood: []});
+    const [opponentCollection, setOpponentCollection] = useState({opponent_melds: [], opponent_deadwood: []});
 
     const isRun = (cards) => {
         cards.sort((a, b) => a.value - b.value);
@@ -112,13 +114,32 @@ const useMeldsAndDeadwood = (hands) => {
         return bestWorkingMeldCombination;
     }
 
-    const findDeadwoodPile = (cards) => {
-        const bestWorkingMeldCombination = findBestWorkingMeldCombination(cards);
-        const flattened = bestWorkingMeldCombination.flat();
+    const findDeadwoodPile = (cards, melds) => {
+        if (!melds || !Array.isArray(melds)) {
+            return cards;
+        }
+        const flattened = melds.flat();
         const flattened_srcs = flattened.map(card => card.src);
         const deadwood = cards.filter(card => !flattened_srcs.includes(card.src));
         return deadwood;
     }
+
+    useEffect(() => {
+        if (!hands || !hands.user_hand || !hands.opponent_hand || !hands.user_hand.length > 0 || !hands.opponent_hand.length > 0) return;
+
+        const userHand = [...hands.user_hand];
+        const opponentHand = [...hands.opponent_hand];
+        const userMelds = findBestWorkingMeldCombination(userHand);
+        const userDeadwood = findDeadwoodPile(userHand, userMelds);
+        const opponentMelds = findBestWorkingMeldCombination(opponentHand);
+        const opponentDeadwood = findDeadwoodPile(opponentHand, opponentMelds);
+    
+        setUserCollection({ user_melds: userMelds, user_deadwood: userDeadwood });
+        setOpponentCollection({ opponent_melds: opponentMelds, opponent_deadwood: opponentDeadwood });
+    
+    }, [hands]);
+
+    return [userCollection, opponentCollection];
 
 }
 
