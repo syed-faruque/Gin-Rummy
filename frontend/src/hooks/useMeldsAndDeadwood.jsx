@@ -125,7 +125,7 @@ const useMeldsAndDeadwood = (hands) => {
     }
 
     useEffect(() => {
-        if (!hands || !hands.user_hand || !hands.opponent_hand || !hands.user_hand.length > 0 || !hands.opponent_hand.length > 0) return;
+        if (!hands || !hands.user_hand || !hands.opponent_hand) return;
 
         const userHand = [...hands.user_hand];
         const opponentHand = [...hands.opponent_hand];
