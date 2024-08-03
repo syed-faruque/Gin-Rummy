@@ -14,7 +14,7 @@ const useMeldsAndDeadwood = (hands) => {
 
 // checks if a list of cards is a run
     const isRun = (cards) => {
-        cards.sort((a, b) => a.value - b.value); //sorts the list of cards by value
+        cards.sort((a, b) => a.value - b.value);
         const suit = cards[0].suit;
         for (let i = 1; i < cards.length; i++) {
             if (cards[i].suit !== suit || cards[i].value !== cards[i - 1].value + 1) {
@@ -26,7 +26,7 @@ const useMeldsAndDeadwood = (hands) => {
 
 // checks if a list of cards is a set
     const isSet = (cards) => {
-        cards.sort((a, b) => a.value - b.value); // sorts the list of cards by value
+        cards.sort((a, b) => a.value - b.value);
         const rank = cards[0].value;
         for (let i = 1; i < cards.length; i++) {
             if (cards[i].value !== rank) {
