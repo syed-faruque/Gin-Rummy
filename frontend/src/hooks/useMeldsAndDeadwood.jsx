@@ -26,7 +26,6 @@ const useMeldsAndDeadwood = (hands) => {
     
 // checks if a list of cards is a set
     const isSet = (cards) => {
-        cards.sort((a, b) => a.value - b.value);
         const rank = cards[0].value;
         for (let i = 1; i < cards.length; i++) {
             if (cards[i].value !== rank) {
