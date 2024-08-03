@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 
 const useMeldsAndDeadwood = (hands) => {
+    
     const user_hand = [...hands.user_hand];
     const opponent_hand = [...hands.opponent_hand];
     const [userCollection, setUserCollection] = useState({user_melds: [], user_deadwood: []});
