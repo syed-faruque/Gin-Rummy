@@ -3,6 +3,8 @@
  * created: July 15 2024
 **/
 
+//~~~~~~~~~~~~ uses brute force algorithm to locate the most optimal meld and deadwood pile in a hand ~~~~~~~~~~~~~~//
+
 import { useEffect, useState } from "react";
 
 const useMeldsAndDeadwood = (hands) => {
@@ -12,6 +14,7 @@ const useMeldsAndDeadwood = (hands) => {
     const [userCollection, setUserCollection] = useState({user_melds: [], user_deadwood: []});
     const [opponentCollection, setOpponentCollection] = useState({opponent_melds: [], opponent_deadwood: []});
 
+// checks if a list of cards is a run
     const isRun = (cards) => {
         cards.sort((a, b) => a.value - b.value);
         const suit = cards[0].suit;
@@ -22,7 +25,8 @@ const useMeldsAndDeadwood = (hands) => {
         }
         return true;
     }
-    
+
+// checks if a list of cards is a set
     const isSet = (cards) => {
         cards.sort((a, b) => a.value - b.value);
         const rank = cards[0].value;
@@ -33,21 +37,25 @@ const useMeldsAndDeadwood = (hands) => {
         }
         return true;
     }
-    
+
+// checks if a list of cards is either a run or a set
     const isMeld = (cards) => {
         return isSet(cards) || isRun(cards);
     }
 
+// finds the total value of a list of cards
     const calculateTotalValueOfCards = (cards) => {
         return cards.reduce((total, card) => total + card.value, 0);
     }
 
+// finds the total value of a list of melds. The list of melds is a two-d array
     const calculateTotalValueOfMeldCombination = (meldlist) => {
         const flattened = meldlist.flat();
         const total_value = calculateTotalValueOfCards(flattened);
         return total_value;
     }
 
+// turns an array into a two dimensional array containing every possible combination of elements in the array as an array
     const findAllListCombinations = (arr) => {
         const result = [];
         for (const element of arr) {
@@ -61,17 +69,7 @@ const useMeldsAndDeadwood = (hands) => {
         return result;
     }
 
-    const isOverlap = (cardlist1, cardlist2) => {
-        for (let i = 0; i < cardlist1.length; i++) {
-            for (let j = 0; j < cardlist2.length; j++) {
-                if (cardlist2[j].src === cardlist1[i].src) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
+// checks whether a list of melds contains an overlapping card
     const isWorkingMeldCombination = (meldlist) => {
         const flattened = meldlist.flat();
         for (let i = 0; i < flattened.length-1; i++) {
@@ -84,21 +82,28 @@ const useMeldsAndDeadwood = (hands) => {
         return true;
     }
 
-
+// finds every possible meld in a list of cards
     const findAllPossibleMelds = (cards) => {
+    // finds every possible combination of cards
         const allCardCombinations = findAllListCombinations(cards);
+    // filters out combinations >= 3 only
         const groupings = allCardCombinations.filter(combo => combo.length >= 3);
+    // filters out the ones that satisfy a meld
         const possibleMelds = groupings.filter(grouping => isMeld(grouping));
         return possibleMelds;
     }
 
+// finds all meld combinations that do not contain an overlapping card
     const findAllWorkingMeldCombinations = (cards) => {
         const allPossibleMelds = findAllPossibleMelds(cards);
+    // uses helper function to find all combinations of meld lists and store them in a central array
         const allMeldCombinations = findAllListCombinations(allPossibleMelds);
+    // filters out working meld combinations from the array containing all meld combos
         const allWorkingMeldCombinations = allMeldCombinations.filter(meldlist => isWorkingMeldCombination(meldlist));
         return allWorkingMeldCombinations;
     }
 
+// finds the highest value meld combination amongst all working meld combinations
     const findBestWorkingMeldCombination = (cards) => {
         const allWorkingMeldCombinations = findAllWorkingMeldCombinations(cards);
         let max_value = 0;
@@ -114,6 +119,7 @@ const useMeldsAndDeadwood = (hands) => {
         return bestWorkingMeldCombination;
     }
 
+// finds the cards that are not part of the best possible meld combination
     const findDeadwoodPile = (cards, melds) => {
         if (!melds || !Array.isArray(melds)) {
             return cards;
@@ -124,6 +130,7 @@ const useMeldsAndDeadwood = (hands) => {
         return deadwood;
     }
 
+// ~~~~~~~~~~~~~~~~~~~~~ recalculate every time hands change and return state ~~~~~~~~~~~~~~~~~~~~~~ //
     useEffect(() => {
         if (!hands || !hands.user_hand || !hands.opponent_hand) return;
 
