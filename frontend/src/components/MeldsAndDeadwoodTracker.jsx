@@ -4,6 +4,7 @@
 **/
 
 import useMeldsAndDeadwood from "../hooks/useMeldsAndDeadwood";
+import useKnockData from "../hooks/useKnockData";
 
 const MeldsAndDeadWoodTracker = ({
     socket, player,
@@ -24,9 +25,11 @@ const MeldsAndDeadWoodTracker = ({
     const [userCollection, opponentCollection] = useMeldsAndDeadwood(hands);
     const user_melds = userCollection.user_melds || [];
     const user_deadwood = userCollection.user_deadwood || [];
+    const knockData = useKnockData(userCollection, hands);
+    const deadwood_total = knockData.deadwood_total;
     const windowHeight = windowSize.height;
-    const marginMelds = windowHeight / 7;
-    const marginDeadwood = windowHeight / 10;
+    const marginMelds = windowHeight/7;
+    const marginDeadwood = windowHeight/10;
 
     const styles = {
         label: {
@@ -75,7 +78,7 @@ const MeldsAndDeadWoodTracker = ({
                 ))}
             </div>
             <div style={styles.deadwood}>
-                <span style={styles.label}>Deadwood:</span>
+                <span style={styles.label}>Deadwood ({deadwood_total}):</span>
                 <div style={styles.meld}>
                     {user_deadwood.length > 0 && user_deadwood.map(card => (
                         <span key={card.value + card.suit} style={styles.cardSymbol(card.color)}>
@@ -89,5 +92,6 @@ const MeldsAndDeadWoodTracker = ({
 }
 
 export default MeldsAndDeadWoodTracker;
+
 
 
