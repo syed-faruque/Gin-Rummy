@@ -5,24 +5,28 @@
 
 //~~~~~~~~~~ this is the main backend for the game. When any event occurs, like a move, this notifies both the user and opponent of it. ~~~~~~~//
 
+//library imports
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+
+// server setup
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {cors: {origin: "http://localhost:5173", methods: ["GET", "POST"]}});
+
+// variables
 let num_users = 0;
 let player1_socket_id;
 let player2_socket_id;
 
-
 const getShuffledArray = () => {
-    let positions = [
-        0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12,
-        13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-        39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
-    ];
+    let positions = 
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 
+        31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51];
 
     for (i = 0; i < positions.length; i++) {
         const random = Math.floor(Math.random() * 52);
@@ -38,8 +42,7 @@ const getShuffledArray = () => {
 let shuffled_array = getShuffledArray();
 
 io.on("connection", (socket) => {
-
-    // as soon as two players join the lobby, the game starts
+// as soon as two players join, the game starts
     num_users++;
     if (num_users == 1) {
         player1_socket_id = socket.id;
@@ -87,6 +90,12 @@ io.on("connection", (socket) => {
     socket.on("draw-from-pile", () => {
         socket.emit("draw-from-pile", {self: true});
         io.to(socket.opponent_id).emit("draw-from-pile", {self: false});
+    })
+
+    socket.on("knock", (data) => {
+        const index = data.index_max_value_card;
+        socket.emit("knock", {self: true, index_max_value_card: index});
+        io.to(socket.opponent_id).emit("knock", {self: false, index_max_value_card: index});
     })
 
     socket.on("disconnect", () => {
