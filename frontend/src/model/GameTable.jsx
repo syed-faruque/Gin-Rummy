@@ -5,6 +5,7 @@ import Deck from "../components/Deck";
 import Hands from "../components/Hands";
 import Pile from "../components/Pile";
 import PassButton from "../components/PassButton";
+import KnockButton from "../components/KnockButton";
 import useWindowSize from "../hooks/useWindowSize";
 import Message from "../components/Message";
 import MeldsAndDeadWoodTracker from "../components/MeldsAndDeadwoodTracker";
@@ -23,6 +24,8 @@ const GameTable = ({socket, player}) => {
     const [turn, setTurn] = useState(player == 1);
     const [stage, setStage] = useState(0);
     const [last, setLast] = useState({});
+    const [userKnocked, setUserKnocked] = useState(false);
+    const [opponentKnocked, setOpponentKnocked] = useState(false);
     const windowSize = useWindowSize();
 
     const updateDeck = (newDeck) => {
@@ -65,6 +68,14 @@ const GameTable = ({socket, player}) => {
         setAnimationFromHand(newAnimationFromHand);
     }
 
+    const updateUserKnocked = (bool) => {
+        setUserKnocked(bool);
+    }
+
+    const updateOpponentKnocked = (bool) => {
+        setOpponentKnocked(bool);
+    }
+
     const props = {
         socket, player,
         deck, updateDeck,
@@ -76,6 +87,8 @@ const GameTable = ({socket, player}) => {
         animationToHandStartingPoint, updateAnimationToHandStartingPoint,
         animationToPileStartingPoint, updateAnimationToPileStartingPoint,
         animationFromHand, updateAnimationFromHand,
+        userKnocked, updateUserKnocked,
+        opponentKnocked, updateOpponentKnocked,
         turn, updateTurn,
         stage, updateStage,
         last, updateLast,
@@ -100,6 +113,7 @@ const GameTable = ({socket, player}) => {
             <Hands {...props}/>
             <Pile {...props}/>
             <PassButton {...props} />
+            <KnockButton {...props} />
             <Message {...props} />
             <MeldsAndDeadWoodTracker {...props} />
         </main>
