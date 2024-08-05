@@ -1,13 +1,9 @@
-/**
- * @author Syed Faruque
- * created: July 5 2024
-**/
-
 import useInitializeHands from "../hooks/useInitializeHands";
 import useHandListeners from "../hooks/useHandListeners";
 import useHandCardZIndex from "../hooks/useHandCardZIndex";
-import getHandPosition from "../helpers/getHandPosition";
-import getHandPositionBeforeDraw from "../helpers/getHandPositionBeforeDraw";
+import getSortedHandIndexes from "../helpers/getSortedHandIndexes";
+import useMeldsAndDeadwood from "../hooks/useMeldsAndDeadwood";
+import getAnimationToHandFinalPoint from "../helpers/getAnimationToHandFinalPoint";
 import Card from "./Card";
 import cardback from "../images/cardback.png";
 
@@ -20,7 +16,10 @@ const Hands = ({
     pileInitialized, updatePileInitialized,
     handsInitialized, updateHandsInitialized,
     animationToHandStartingPoint, updateAnimationToHandStartingPoint,
+    animationToPileStartingPoint, updateAnimationToPileStartingPoint,
     animationFromHand, updateAnimationFromHand,
+    userKnocked, updateUserKnocked,
+    opponentKnocked, updateOpponentKnocked,
     turn, updateTurn,
     stage, updateStage,
     last, updateLast,
@@ -32,8 +31,19 @@ const Hands = ({
 
     const user_hand_length = hands.user_hand.length;
     const opponent_hand_length = hands.opponent_hand.length;
+    const [userCollection, opponentCollection] = useMeldsAndDeadwood(hands);
+    const sortedHandIndexes = getSortedHandIndexes(hands, userCollection, opponentCollection);
 
-    // lets the backend know the user wants to remove a card from their hand. As long as its not his last pick, no issue.
+    const getFinalPoint = (index, user) => {
+        const {userAnimationToHandFinalPoint, opponentAnimationToHandFinalPoint} = getAnimationToHandFinalPoint(animationFromHand, windowSize, user_hand_length, opponent_hand_length, index, stage, userKnocked, opponentKnocked, sortedHandIndexes);
+        if (user) {
+            return userAnimationToHandFinalPoint;
+        }
+        else {
+            return opponentAnimationToHandFinalPoint;
+        }
+    }
+
     const emitDiscardNotice = (index, turn, stage) => {
         const discarded_card = hands.user_hand[index];
         if (last.src != discarded_card.src && turn && stage == 2) {
@@ -50,14 +60,10 @@ const Hands = ({
                         src = {card.src}
                         alt = {"user-hand-card"}
                         animationStartPoint = {animationToHandStartingPoint}
-    /**
-     * Just making clear, if a draw animation is active. I want all other cards to be fixed besides the card that was moved.
-     * As a result, I set the final point to be the position before draw and I make the transition nullified during this period
-    **/
-                        animationFinalPoint = {(animationFromHand.active && animationFromHand.user) ? getHandPositionBeforeDraw(index, animationFromHand, windowSize) : getHandPosition(index, true, user_hand_length, windowSize)}
-                        animationTime = {(animationFromHand.active && animationFromHand.user) ? {duration: 0} : {duration: 0.6}}
+                        animationFinalPoint = {getFinalPoint(index, true)}
+                        animationTime = {(animationFromHand.active && animationFromHand.user && !(stage == 3)) ? {duration: 0} : {duration: 0.6}}
                         isAnimated = {true}
-                        zIndex={useHandCardZIndex(index, animationFromHand)}
+                        zIndex={((userKnocked || opponentKnocked) && stage == 3) ? useHandCardZIndex(index, animationFromHand, userKnocked, opponentKnocked, sortedHandIndexes, stage).user_z: useHandCardZIndex(index, animationFromHand, userKnocked, opponentKnocked, sortedHandIndexes, stage)}
                         onClick={deckInitialized && pileInitialized && handsInitialized && !animationFromHand.active ? () => emitDiscardNotice(index, turn, stage) : null}
                     />
                 ))}
@@ -66,16 +72,12 @@ const Hands = ({
                 {hands.opponent_hand && hands.opponent_hand.map((card, index) => (
                     <Card 
                         key = {index}
-                        src = {cardback}
+                        src = {(stage == 3) ? card.src : cardback}
                         alt = {"opponent-hand-card"}
                         animationStartPoint = {animationToHandStartingPoint}
-    /**
-     * Just making clear, if a draw animation is active. I want all other cards to be fixed besides the card that was moved.
-     * As a result, I set the final point to be the position before draw and I make the transition nullified during this period
-    **/
-                        animationFinalPoint = {(animationFromHand.active && !animationFromHand.user) ? getHandPositionBeforeDraw(index, animationFromHand, windowSize) : getHandPosition(index, false, opponent_hand_length, windowSize)}
-                        animationTime = {(animationFromHand.active && !animationFromHand.user) ? {duration: 0} : {duration: 0.6}}
-                        zIndex={useHandCardZIndex(index, animationFromHand)}
+                        animationFinalPoint = {getFinalPoint(index, false)}
+                        animationTime = {(animationFromHand.active && !animationFromHand.user && !(stage == 3)) ? {duration: 0} : {duration: 0.6}}
+                        zIndex={((userKnocked || opponentKnocked) && stage == 3) ? useHandCardZIndex(index, animationFromHand, userKnocked, opponentKnocked, sortedHandIndexes, stage).opponent_z: useHandCardZIndex(index, animationFromHand, userKnocked, opponentKnocked, sortedHandIndexes, stage)}
                         isAnimated = {true}
                     />
                 ))}
