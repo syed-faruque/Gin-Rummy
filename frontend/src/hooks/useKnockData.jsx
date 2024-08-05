@@ -8,11 +8,12 @@ const useKnockData = (userCollection, hands) => {
     });
 
     useEffect(() => {
+        if (!hands) return
         const user_hand = hands.user_hand || [];
         const deadwood = userCollection.user_deadwood || [];
 
         const deadwood_total = deadwood.reduce((total, card) => 
-            (card.value === 11 || card.value === 12 || card.value === 13) // the value of Q, K, and J are 10 even though I set their properties are different
+            (card.value === 11 || card.value === 12 || card.value === 13) // the value of Q, K, and J are 10 even though I set their properties different
             ? total + 10 
             : total + card.value, 0
         );
@@ -29,8 +30,10 @@ const useKnockData = (userCollection, hands) => {
                 index_card = user_hand.findIndex(userCard => userCard.src === card.src);
             }
         }
+        const isFaceCard = (max_value_card && (max_value_card.value == 11 || max_value_card.value == 12 || max_value_card.value == 13));
+        if (isFaceCard) max_value = 10; // the value of Q, K, and J are 10 even though I set their properties different
 
-        const knockReady = (deadwood_total - max_value) <= 10;
+        const knockReady = ((deadwood_total - max_value) <= 10) && (hands.user_hand.length >= 10);
 
         setKnockData({
             ready: knockReady,
