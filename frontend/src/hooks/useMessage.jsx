@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useMessage = (stage, turn, pileInitialized) => {
+const useMessage = (stage, turn, pileInitialized, userKnocked, opponentKnocked) => {
     const [message, setMessage] = useState();
     const updateMessage = (newMessage) => {
         setMessage(newMessage);
@@ -9,6 +9,12 @@ const useMessage = (stage, turn, pileInitialized) => {
     useEffect(() => {
         if (!pileInitialized) return;
 
+        else if (userKnocked && stage == 3) {
+            setMessage("Knocked !! Performing lay off with opponent hand")
+        }
+        else if (opponentKnocked && stage == 3) {
+            setMessage("Opponent knocked !! Performing lay off")
+        }
         else if (turn && stage == 0) {
             setMessage("You may draw from the pile or pass the turn ...");
         }
