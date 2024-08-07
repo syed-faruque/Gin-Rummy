@@ -141,9 +141,7 @@ const useMeldsAndDeadwood = (hands) => {
     
 // finds the cards that are not part of the best possible meld combination
     const findDeadwoodPile = (cards, melds) => {
-        if (!melds || !Array.isArray(melds)) {
-            return cards;
-        }
+        if (!melds) return cards;
         const flattened = melds.flat();
         const flattened_srcs = flattened.map(card => card.src);
         const deadwood = cards.filter(card => !flattened_srcs.includes(card.src));
