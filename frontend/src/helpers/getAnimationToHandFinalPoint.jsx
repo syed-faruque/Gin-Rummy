@@ -1,7 +1,8 @@
 import getHandPosition from "./getHandPosition";
 import getHandPositionBeforeDraw from "./getHandPositionBeforeDraw";
+import getSortedHandPosition from "./getSortedHandPosition";
 
-const getAnimationToHandFinalPoint = (animationFromHand, windowSize, user_hand_length, opponent_hand_length, index, stage, userKnocked, opponentKnocked, sortedHandIndexes) => {
+const getAnimationToHandFinalPoint = (animationFromHand, windowSize, user_hand_length, opponent_hand_length, index, stage, userKnocked, opponentKnocked, sortedHandIndexes, userCollection, opponentCollection) => {
 
     const {user_sorted_hand_indexes, opponent_sorted_hand_indexes} = sortedHandIndexes;
 
@@ -9,11 +10,12 @@ const getAnimationToHandFinalPoint = (animationFromHand, windowSize, user_hand_l
     const opponentStandardHandPosition = getHandPosition(index, false, opponent_hand_length, windowSize);
     const userHandPositionBeforeDraw = getHandPositionBeforeDraw(index, animationFromHand, windowSize);
     const opponentHandPositionBeforeDraw = getHandPositionBeforeDraw(index, animationFromHand, windowSize);
-    const userSortedHandPosition = getHandPosition((user_sorted_hand_indexes.indexOf(index)), true, user_hand_length, windowSize);
-    const opponentSortedHandPosition = getHandPosition((opponent_sorted_hand_indexes.indexOf(index)), false, opponent_hand_length, windowSize);
 
     if ((userKnocked || opponentKnocked) && !animationFromHand.active) {
-        return {userAnimationToHandFinalPoint: userSortedHandPosition, opponentAnimationToHandFinalPoint: opponentSortedHandPosition}
+        return {
+            userAnimationToHandFinalPoint: getSortedHandPosition(user_sorted_hand_indexes.indexOf(index), true, userCollection, windowSize),
+            opponentAnimationToHandFinalPoint: getSortedHandPosition(opponent_sorted_hand_indexes.indexOf(index), false, opponentCollection, windowSize)
+        }
     }
     else if (animationFromHand.active && animationFromHand.user) {
         return {userAnimationToHandFinalPoint: userHandPositionBeforeDraw, opponentAnimationToHandFinalPoint: opponentStandardHandPosition}
