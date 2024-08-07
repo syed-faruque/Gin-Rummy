@@ -93,11 +93,8 @@ const useMeldsAndDeadwood = (hands) => {
 
 // finds every possible meld in a list of cards
     const findAllPossibleMelds = (cards) => {
-    // finds every possible combination of cards
         const allCardCombinations = findAllListCombinations(cards);
-    // filters out combinations >= 3 only
         const groupings = allCardCombinations.filter(combo => combo.length >= 3);
-    // filters out the ones that satisfy a meld
         const possibleMelds = groupings.filter(grouping => isMeld(grouping));
         return possibleMelds;
     }
@@ -105,9 +102,7 @@ const useMeldsAndDeadwood = (hands) => {
 // finds all meld combinations that do not contain an overlapping card
     const findAllWorkingMeldCombinations = (cards) => {
         const allPossibleMelds = findAllPossibleMelds(cards);
-    // uses helper function to find all combinations of meld lists and store them in a central array
         const allMeldCombinations = findAllListCombinations(allPossibleMelds);
-    // filters out working meld combinations from the array containing all meld combos
         const allWorkingMeldCombinations = allMeldCombinations.filter(meldlist => isWorkingMeldCombination(meldlist));
         return allWorkingMeldCombinations;
     }
