@@ -35,7 +35,7 @@ const Hands = ({
     const sortedHandIndexes = getSortedHandIndexes(hands, userCollection, opponentCollection);
 
     const getFinalPoint = (index, user) => {
-        const {userAnimationToHandFinalPoint, opponentAnimationToHandFinalPoint} = getAnimationToHandFinalPoint(animationFromHand, windowSize, user_hand_length, opponent_hand_length, index, stage, userKnocked, opponentKnocked, sortedHandIndexes);
+        const {userAnimationToHandFinalPoint, opponentAnimationToHandFinalPoint} = getAnimationToHandFinalPoint(animationFromHand, windowSize, user_hand_length, opponent_hand_length, index, stage, userKnocked, opponentKnocked, sortedHandIndexes, userCollection, opponentCollection);
         if (user) {
             return userAnimationToHandFinalPoint;
         }
