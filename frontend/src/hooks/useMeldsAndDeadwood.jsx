@@ -26,6 +26,7 @@ const useMeldsAndDeadwood = (hands) => {
     
 // checks if a list of cards is a set
     const isSet = (cards) => {
+        cards.sort((a, b) => a.value - b.value);
         const rank = cards[0].value;
         for (let i = 1; i < cards.length; i++) {
             if (cards[i].value !== rank) {
@@ -157,8 +158,8 @@ const useMeldsAndDeadwood = (hands) => {
         const opponentMelds = findBestWorkingMeldCombination(opponentHand);
         const opponentDeadwood = findDeadwoodPile(opponentHand, opponentMelds);
     
-        setUserCollection({ user_melds: userMelds, user_deadwood: userDeadwood });
-        setOpponentCollection({ opponent_melds: opponentMelds, opponent_deadwood: opponentDeadwood });
+        setUserCollection({ melds: userMelds, deadwood: userDeadwood });
+        setOpponentCollection({ melds: opponentMelds, deadwood: opponentDeadwood });
     
     }, [hands]);
 
