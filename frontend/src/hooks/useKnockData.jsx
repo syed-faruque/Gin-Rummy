@@ -10,7 +10,7 @@ const useKnockData = (userCollection, hands) => {
     useEffect(() => {
         if (!hands) return
         const user_hand = hands.user_hand || [];
-        const deadwood = userCollection.user_deadwood || [];
+        const deadwood = userCollection.deadwood || [];
 
         const deadwood_total = deadwood.reduce((total, card) => 
             (card.value === 11 || card.value === 12 || card.value === 13) // the value of Q, K, and J are 10 even though I set their properties different
