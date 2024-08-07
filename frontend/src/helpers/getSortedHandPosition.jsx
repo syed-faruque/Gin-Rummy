@@ -16,8 +16,8 @@ const getSortedHandPosition = (index, user, collection, windowSize) => {
     const cardHeight = 100;
     const windowHeight = windowSize.height;
     const windowWidth = windowSize.width;
-    const melds = collection.melds;
-    const deadwood = collection.deadwood;
+    const melds = collection.melds || [];
+    const deadwood = collection.deadwood || [];
     const num_melds = melds.length;
     const combined = melds.concat([deadwood]);
     const num_groups = combined.length;
