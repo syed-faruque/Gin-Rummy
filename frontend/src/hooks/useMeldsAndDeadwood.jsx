@@ -9,8 +9,8 @@ const useMeldsAndDeadwood = (hands) => {
 
     const user_hand = [...hands.user_hand];
     const opponent_hand = [...hands.opponent_hand];
-    const [userCollection, setUserCollection] = useState({user_melds: [], user_deadwood: []});
-    const [opponentCollection, setOpponentCollection] = useState({opponent_melds: [], opponent_deadwood: []});
+    const [userCollection, setUserCollection] = useState({melds: [], deadwood: []});
+    const [opponentCollection, setOpponentCollection] = useState({melds: [], deadwood: []});
 
     
 // checks if a list of cards is a run
