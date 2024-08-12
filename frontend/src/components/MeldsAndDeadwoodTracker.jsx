@@ -3,28 +3,17 @@
  * created: July 20 2024
 **/
 
-import useMeldsAndDeadwood from "../hooks/useMeldsAndDeadwood";
 import useKnockData from "../hooks/useKnockData";
+import useMeldsAndDeadwood from "../hooks/useMeldsAndDeadwood"
 
 const MeldsAndDeadWoodTracker = ({
-    socket, player,
-    deck, updateDeck,
-    pile, updatePile,
-    hands, updateHands,
-    deckInitialized, updateDeckInitialized,
-    pileInitialized, updatePileInitialized,
-    handsInitialized, updateHandsInitialized,
-    animationToHandStartingPoint, updateAnimationToHandStartingPoint,
-    animationFromHand, updateAnimationFromHand,
-    turn, updateTurn,
-    stage, updateStage,
-    last, updateLast,
+    hands,
     windowSize
 }) => {
 
     const [userCollection, opponentCollection] = useMeldsAndDeadwood(hands);
-    const user_melds = userCollection.user_melds || [];
-    const user_deadwood = userCollection.user_deadwood || [];
+    const user_melds = userCollection.melds || [];
+    const user_deadwood = userCollection.deadwood || [];
     const knockData = useKnockData(userCollection, hands);
     const deadwood_total = knockData.deadwood_total;
     const windowHeight = windowSize.height;
@@ -92,6 +81,7 @@ const MeldsAndDeadWoodTracker = ({
 }
 
 export default MeldsAndDeadWoodTracker;
+
 
 
 
