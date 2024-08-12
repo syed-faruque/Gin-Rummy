@@ -59,18 +59,14 @@ const useMeldsAndDeadwood = (hands) => {
 
     
 // turns an array into a two dimensional array containing every possible combination of elements in the array as an array
-    const findAllListCombinations = (arr) => {
-        const result = [];
-        for (const element of arr) {
-            const newCombinations = [];
-            for (const combination of result) {
-                newCombinations.push([...combination, element]);
-            }
-            result.push(...newCombinations);
-            result.push([element]);
-        }
-        return result;
+const findAllListCombinations = (arr) => {
+    const result = [[]];
+    for (const element of arr) {
+        const newCombinations = result.map(combination => [...combination, element]);
+        result.push(...newCombinations);
     }
+    return result.slice(1);
+};
 
     
 // checks whether a list of melds contains an overlapping card
