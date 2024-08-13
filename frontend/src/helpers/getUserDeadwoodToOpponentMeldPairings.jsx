@@ -43,12 +43,8 @@ const getUserDeadwoodToOpponentMeldPairings = (user_deadwood, opponent_melds) =>
 
 
     const listOfCardsFitIntoMeld = (listOfCards, meld) => {
-        const startConcatination = listOfCards.concat(meld);
-        const endConcatination = meld.concat(listOfCards);
-        if (isMeld(startConcatination) || isMeld(endConcatination)) {
-            return true;
-        }
-        return false;
+        const concatination = listOfCards.concat(meld);
+        return isMeld(concatination);
     }
 
 
