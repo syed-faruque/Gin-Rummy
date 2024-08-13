@@ -83,6 +83,8 @@ const getUserDeadwoodToOpponentMeldPairings = (user_deadwood, opponent_melds) =>
 
     const pairings = findAllPairings([...user_deadwood], [...opponent_melds]);
 
+    return pairings;
+
 }
 
 export default getUserDeadwoodToOpponentMeldPairings;
