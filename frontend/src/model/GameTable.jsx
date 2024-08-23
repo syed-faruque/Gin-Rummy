@@ -9,6 +9,7 @@ import KnockButton from "../components/KnockButton";
 import useWindowSize from "../hooks/useWindowSize";
 import Message from "../components/Message";
 import MeldsAndDeadWoodTracker from "../components/MeldsAndDeadwoodTracker";
+import ScoreBoard from "../components/ScoreBoard";
 
 const GameTable = ({socket, player}) => {
 
@@ -107,15 +108,19 @@ const GameTable = ({socket, player}) => {
         document.body.style.backgroundColor = "#006400";
       }, []);
 
+    const roundEnded = (userKnocked || opponentKnocked) && !animationFromHand.active;
+
+
     return(
         <main>
-            <Deck {...props}/>
+            {!roundEnded && <Deck {...props} />}
             <Hands {...props}/>
-            <Pile {...props}/>
+            {!roundEnded &&<Pile {...props}/>}
             <PassButton {...props} />
             <KnockButton {...props} />
-            <Message {...props} />
-            <MeldsAndDeadWoodTracker {...props} />
+            {!roundEnded && <Message {...props} />}
+            {!roundEnded && <MeldsAndDeadWoodTracker {...props} />}
+            {roundEnded && <ScoreBoard {...props} />}
         </main>
     )
 
