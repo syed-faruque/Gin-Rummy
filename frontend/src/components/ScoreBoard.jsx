@@ -1,12 +1,44 @@
+import { useState, useEffect } from "react";
 import useLaidOffCards from "../hooks/useLaidOffCards";
 import getRoundResults from "../helpers/getRoundResults";
 import useMeldsAndDeadwood from "../hooks/useMeldsAndDeadwood";
+import getDeckPosition from "../helpers/getDeckPosition";
 
 const ScoreBoard = ({
-    hands,
-    userKnocked,
-    opponentKnocked
+    player, socket,
+    hands, deck,
+    userKnocked, updateUserKnocked,
+    opponentKnocked, updateOpponentKnocked,
+    updateDeck, updatePile, updateHands,
+    updateTurn, updateStage, updateLast,
+    updateDeckInitialized, updateHandsInitialized, updatePileInitialized,
+    updateAnimationToPileStartingPoint, windowSize
 }) => {
+
+    const [timer, setTimer] = useState(20);
+
+    useEffect(() => {
+        if (timer > 0) {
+            const countdown = setTimeout(() => setTimer(timer - 1), 1000);
+            return () => clearTimeout(countdown);
+        }
+
+        if (timer == 0) {
+            socket.emit("new-round");
+            updateDeck([]);
+            updatePile([]);
+            updateHands({user_hand: [], opponent_hand: []});
+            updateAnimationToPileStartingPoint(getDeckPosition(deck.length-1, windowSize));
+            updateDeckInitialized(false);
+            updatePileInitialized(false);
+            updateHandsInitialized(false);
+            updateTurn(player == 1);
+            updateStage(0);
+            updateLast({});
+            updateUserKnocked(false);
+            updateOpponentKnocked(false);
+        }
+    }, [timer]);
 
     const [userCollection, opponentCollection] = useMeldsAndDeadwood(hands);
     const [userLaidOffCardParings, opponentLaidOffCardPairings] = useLaidOffCards(userCollection, opponentCollection, userKnocked, opponentKnocked);
@@ -31,12 +63,14 @@ const ScoreBoard = ({
         if (roundResults.knocker_won) {
             playerWon = true;
             isUndercut = false;
-        } else {
+        } 
+        else {
             playerWon = false;
             isUndercut = true;
         }
         point_difference = roundResults.point_difference;
-    } else if (opponentKnocked) {
+    } 
+    else if (opponentKnocked) {
         const knocking_deadwood = opponent_deadwood;
         const non_knocking_deadwood = user_deadwood;
         const laid_off_card_pairings = userLaidOffCardParings;
@@ -46,7 +80,8 @@ const ScoreBoard = ({
         if (roundResults.knocker_won) {
             playerWon = false;
             isUndercut = false;
-        } else {
+        } 
+        else {
             playerWon = true;
             isUndercut = true;
         }
@@ -144,6 +179,17 @@ const ScoreBoard = ({
                             No cards were laid off
                         </span>
                     )}
+                </div>
+                <div
+                    className="timer"
+                    style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        color: "#333",
+                        marginTop: "20px",
+                    }}
+                >
+                    Next round starts in: {timer} seconds
                 </div>
             </div>
         </div>
