@@ -92,14 +92,31 @@ const findAllListCombinations = (arr) => {
         return count;
     }
 
-
-// finds every possible meld in a list of cards
+// finds every possible meld within a list of cards
     const findAllPossibleMelds = (cards) => {
-        const allCardCombinations = findAllListCombinations(cards);
-        const groupings = allCardCombinations.filter(combo => combo.length >= 3);
-        const possibleMelds = groupings.filter(grouping => isMeld(grouping));
-        return possibleMelds;
-    }
+        const result = [];
+        const n = cards.length;
+
+        for (let i = 0; i < n; i++) {
+            for (let j = i + 1; j < n; j++) {
+                for (let k = j + 1; k < n; k++) {
+                    let combo = [cards[i], cards[j], cards[k]];
+                    if (isMeld(combo)) {
+                        result.push([...combo]);
+                    }
+                    for (let l = k + 1; l < n; l++) {
+                        combo.push(cards[l]);
+                        if (isMeld(combo)) {
+                            result.push([...combo]);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    };
+    
+
 
     
 // finds all meld combinations that do not contain an overlapping card
