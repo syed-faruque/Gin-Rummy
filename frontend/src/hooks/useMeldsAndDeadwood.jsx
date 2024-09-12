@@ -93,28 +93,29 @@ const findAllListCombinations = (arr) => {
     }
 
 // finds every possible meld within a list of cards
-    const findAllPossibleMelds = (cards) => {
+    function findAllPossibleMelds(cards) {
         const result = [];
         const n = cards.length;
 
-        for (let i = 0; i < n; i++) {
-            for (let j = i + 1; j < n; j++) {
-                for (let k = j + 1; k < n; k++) {
-                    let combo = [cards[i], cards[j], cards[k]];
-                    if (isMeld(combo)) {
-                        result.push([...combo]);
-                    }
-                    for (let l = k + 1; l < n; l++) {
-                        combo.push(cards[l]);
-                        if (isMeld(combo)) {
-                            result.push([...combo]);
-                        }
-                    }
+        // Iterate over all possible combinations using bitmasks
+        for (let mask = 0; mask < (1 << n); mask++) {
+            const combo = [];
+
+            // Build the combination based on the current mask
+            for (let i = 0; i < n; i++) {
+                if (mask & (1 << i)) {
+                    combo.push(cards[i]);
                 }
             }
+
+            // Only consider combinations of 3 or more cards
+            if (combo.length >= 3 && isMeld(combo)) {
+                result.push([...combo]);
+            }
         }
+
         return result;
-    };
+}
     
 
 
